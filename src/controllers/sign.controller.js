@@ -1,19 +1,12 @@
 import bcrypt from 'bcrypt'
-import { db } from '../app.js'
-import { signinSchema, signupSchema } from '../schemas/sign.schema.js'
+import { db } from '../database/database.connection.js'
 import { v4 as uuid } from 'uuid'
 
 export async function signup(req, res) {
     const {name, email, password} = req.body
-    const validBody = signupSchema.validate({
-        name,
-        email,
-        password
-    })
-    
-    if(validBody.error) return res.sendStatus(422)
     const userExists = await db.collection("users").findOne({email: email})
     if(userExists) return res.sendStatus(409)
+    
     const hash = bcrypt.hashSync(password, 10)
     try {
         await db.collection("users").insertOne({
@@ -28,11 +21,6 @@ export async function signup(req, res) {
 }
 export async function signin(req, res) {
     const {email, password} = req.body
-    const validBody = signinSchema.validate({
-        email,
-        password
-    })
-    if(validBody.error) return res.sendStatus(422)
     try {
         const user = await db.collection("users").findOne({email: email})
         if(!user) return res.sendStatus(404)
