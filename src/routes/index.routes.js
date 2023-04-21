@@ -1,9 +1,9 @@
 import { Router } from "express"
 import signRouter from "./sign.routes.js"
-import moveRouter from "./move.routes.js"
+import transactionRouter from "./transaction.routes.js"
 
 const router = Router()
 router.use(signRouter)
-router.use(moveRouter)
+router.use(transactionRouter)
 
 export default router
