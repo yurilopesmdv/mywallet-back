@@ -2,14 +2,13 @@ import express from 'express'
 import cors from 'cors'
 import { MongoClient } from 'mongodb'
 import dotenv from 'dotenv'
-import {v4 as uuid} from 'uuid'
-import bcrypt from 'bcrypt'
-import Joi from 'joi'
+import router from './routes/index.routes.js'
 
 //CONFIG
 const app = express()
 app.use(cors())
 app.use(express.json())
+app.use(router)
 dotenv.config()
 
 //DB CONNECTION
@@ -20,15 +19,7 @@ try {
 }catch(err) {
     console.log(err.message)
 }
-const db = mongoClient.db()
-
-//SCHEMAS
-
-//roots
-app.post("/cadastro", async(req, res) => {
-    const {email, password} = req.body
-
-})
+export const db = mongoClient.db()
 
 //LISTEN
 const PORT = 5000
