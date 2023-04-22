@@ -1,4 +1,19 @@
-export async function authorization() {
+import { db } from "../database/database.connection.js"
+
+export async function authValidation(req, res, next) {
     const token = req.headers.authorization?.replace('Bearer ', '')
-    if(!token) return resizeBy.sendStatus(401)
+    if(!token) return res.sendStatus(401)
+    console.log(req.headers)
+    try {
+        const session = await db.collection("sessions").findOne({token})
+        if(!session) return res.sendStatus(401)
+        const user = await db.collection("users").findOne({
+            _id: session.userId
+        })
+        res.locals.session = session
+        res.locals.user = user
+        next()
+    } catch (err) {
+        return res.status(500).send(err.message)
+    }
 }

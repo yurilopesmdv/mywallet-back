@@ -28,7 +28,7 @@ export async function signin(req, res) {
         if(!validPassword) return res.sendStatus(401)
         const token = uuid()
         db.collection("sessions").insertOne({
-            id: user._id,
+            userId: user._id,
             token
         })
         return res.status(200).send(token)
