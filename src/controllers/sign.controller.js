@@ -14,7 +14,7 @@ export async function signup(req, res) {
             email,
             password: hash
         })
-        return res.send(201)
+        return res.sendStatus(201)
     } catch(error) {
         res.status(500).send(error.message)
     }
@@ -31,8 +31,17 @@ export async function signin(req, res) {
             userId: user._id,
             token
         })
-        return res.status(200).send(token)
+        return res.status(200).send({name: user.name, token})
     } catch(error) {
         res.status(500).send(error.message)
+    }
+}
+export async function logout(req, res) {
+    const {token} = req.body
+    try {
+        await db.collection("sessions").deleteOne({token})
+        res.status(200).send("Você foi deslogado")
+    }catch(err) {
+        res.status(500).send(err.message)
     }
 }
