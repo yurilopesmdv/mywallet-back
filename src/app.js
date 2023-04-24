@@ -9,5 +9,5 @@ app.use(express.json())
 app.use(router)
 
 //LISTEN
-const PORT = 5000
-app.listen(PORT, () => console.log('Server running in 5000 port'))
+
+app.listen(process.env.PORT, () => console.log(`Server running in ${process.env.PORT} port`))
